@@ -398,9 +398,9 @@
               <FilePath>..\Bsp\oled\fonts.c</FilePath>
             </File>
             <File>
-              <FileName>ssd1306.c</FileName>
+              <FileName>ssd1306_iic.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Bsp\oled\ssd1306.c</FilePath>
+              <FilePath>..\Bsp\oled\ssd1306_iic.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -416,6 +416,11 @@
               <FileName>alg_utils.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Bsp\alg\alg_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>alg_pid_multi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\alg\alg_pid_multi.c</FilePath>
             </File>
           </Files>
         </Group>

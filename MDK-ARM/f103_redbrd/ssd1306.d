@@ -29,4 +29,5 @@ f103_redbrd/ssd1306.o: ../Bsp/oled/ssd1306.c ../Bsp/oled/ssd1306.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_pcd.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
-  ../Bsp/oled/fonts.h
+  ../Bsp/oled/fonts.h ../Bsp/alg\alg_utils.h \
+  C:\opt\Keil_v5\ARM\V6\bin\..\include\stdlib.h

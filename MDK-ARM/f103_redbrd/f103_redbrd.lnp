@@ -3,6 +3,8 @@
 "f103_redbrd\fonts.o"
 "f103_redbrd\ssd1306.o"
 "f103_redbrd\alg_queue.o"
+"f103_redbrd\alg_utils.o"
+"f103_redbrd\alg_pid_multi.o"
 "f103_redbrd\main.o"
 "f103_redbrd\gpio.o"
 "f103_redbrd\freertos.o"
