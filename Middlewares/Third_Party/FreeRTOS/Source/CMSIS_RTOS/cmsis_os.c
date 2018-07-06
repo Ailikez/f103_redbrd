@@ -104,14 +104,11 @@
  */
 #if   defined ( __CC_ARM )
 
-//  #define __ASM            __asm                                      
-//  #define __INLINE         __inline                                     
-//  #define __STATIC_INLINE  static __inline
-//  #include "cmsis_armcc.h"
   #define __ASM            __asm                                      
-  #define __INLINE         inline                                     
-  #define __STATIC_INLINE  static inline
-  #include "cmsis_armcc_V6.h"
+  #define __INLINE         __inline                                     
+  #define __STATIC_INLINE  static __inline
+  #include "cmsis_armcc.h"
+
 /*
  * GNU Compiler
  */

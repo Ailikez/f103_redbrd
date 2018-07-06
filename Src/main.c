@@ -1,4 +1,3 @@
-
 /**
   ******************************************************************************
   * @file           : main.c
@@ -52,18 +51,39 @@
 #include "cmsis_os.h"
 #include "i2c.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "Adafruit_GFX.h"
+#include "stdbool.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+bool is_k1_pressed = false; 
+bool is_k2_pressed = false; 
+bool is_k3_pressed = false; 
+bool is_dot_grid_on = false;
+bool is_axis_on = false;
+bool is_cos_on = false;
+bool is_pwm_on = false; 
+extern __IO uint32_t uwTick;
+__IO uint32_t last_uwTick;
+
+unsigned int counter = 0;
+float duty = 0.0f;
+int x1=0, y1=31, r1=0;
+signed char x2[128], y2[128];
+extern int16_t _width, _height, cursor_x, cursor_y;
+extern uint16_t textcolor, textbgcolor;
+extern uint8_t textsize, rotation;
+extern bool wrap;
 
 /* USER CODE END PV */
 
@@ -109,19 +129,36 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_SPI1_Init();
-  MX_USART3_UART_Init();
-  MX_USART2_UART_Init();
+//  MX_SPI1_Init();
+//  MX_USART3_UART_Init();
+//  MX_USART2_UART_Init();
   MX_I2C1_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+  Adafruit_GFX();
+//  Adafruit_GFX_setCursor(0, 0);
+//  Adafruit_GFX_write_string("FUCK");
+//  Adafruit_GFX_setCursor(80, 0);
+//  Adafruit_GFX_write_string(" YOU");
 
+//      for(int i = 0; i < 127; i++)
+//  {
+//    x2[i] = i - 63;
+//    y2[i] = (signed char)(10*tan((i - 63.0f)/10.0f)) + 31;
+//    ssd1306_DrawPixel(i, y2[i], 1);
+//  }
+//  ssd1306_WriteString("D: ", Font_11x18, White);
+//  ssd1306_WriteFloat(0.0f, 0, Font_11x18, White);
+//  ssd1306_WriteChar('%', Font_11x18, White);
+//  ssd1306_SetCursor(2, 40);
+//  ssd1306_WriteString("PWM off", Font_11x18, White);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
-  MX_FREERTOS_Init();
+//  MX_FREERTOS_Init();
 
   /* Start scheduler */
-  osKernelStart();
+//  osKernelStart();
   
   /* We should never get here as control is now taken by the scheduler */
 
@@ -133,7 +170,164 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+  uint32_t temp = uwTick;
 
+  if(is_k1_pressed)
+  {
+    is_k1_pressed = false;
+    is_cos_on = !is_cos_on;
+    if(!is_cos_on)
+    {
+      for(int i = 0; i < 127; i++)
+      {
+        x2[i] = i - 63;
+        y2[i] = (signed char)(30.0f * cos((i*3 - 63.0f)/10.0f + temp / 500.0f)) + 31;
+        ssd1306_DrawPixel(i, y2[i], 0);
+      }
+    }
+//    if(x1<127)
+//    {Adafruit_GFX_drawCircle(x1, y1, r1, Black);x1++;Adafruit_GFX_drawCircle(x1, y1, r1, White);}
+  }
+  else if(is_k2_pressed)
+  {
+    is_k2_pressed = false;
+    is_axis_on = !is_axis_on;
+    if(!is_axis_on)
+    {
+      Adafruit_GFX_drawFastHLine(0, 31, 128, Black);
+      Adafruit_GFX_drawFastVLine(63, 0, 64, Black);
+      Adafruit_GFX_fillTriangle(127, 31, 123, 28, 123, 34, Black);
+      Adafruit_GFX_fillTriangle(63, 0, 60, 4, 66, 4, Black);
+    }
+//    if(x1>0)               ;
+//    {Adafruit_GFX_drawCircle(x1, y1, r1, Black);x1--;Adafruit_GFX_drawCircle(x1, y1, r1, White);}
+  }
+  if(is_k3_pressed)
+  {
+    is_k3_pressed = false;
+    is_dot_grid_on = !is_dot_grid_on;
+    if(!is_dot_grid_on)
+    {
+      for(int i = 0; i < 127; i++)
+      {
+        for(int j = 0; j < 63; j++)
+        {
+          if(!(i%8) && !(j%8))
+          {
+            ssd1306_DrawPixel(i, j, 0);
+          }
+        }
+      }
+    }
+//    {Adafruit_GFX_drawCircle(x1, y1, r1, Black);r1++;Adafruit_GFX_drawCircle(x1, y1, r1, White);}
+  }
+  if(is_axis_on)
+  {
+    Adafruit_GFX_drawFastHLine(0, 31, 128, White);
+    Adafruit_GFX_drawFastVLine(63, 0, 64, White);
+    Adafruit_GFX_fillTriangle(127, 31, 123, 28, 123, 34, White);
+    Adafruit_GFX_fillTriangle(63, 0, 60, 4, 66, 4, White);
+  }
+
+  if(is_dot_grid_on)
+  {
+    for(int i = 0; i < 127; i++)
+    {
+      for(int j = 0; j < 63; j++)
+      {
+        if(!(i%8) && !(j%8))
+        {
+          ssd1306_DrawPixel(i, j, 1);
+        }
+      }
+    }
+  }
+  
+
+  for(int i = 0; i < 127; i++)
+  {
+    x2[i] = i - 63;
+    y2[i] = (signed char)(30.0f * sin((2*i - 63.0f)/10.0f + temp / 1000.0f) * cos((i - 63.0f)/10.0f + temp / 500.0f)) + 31;
+    ssd1306_DrawPixel(i, y2[i], 1);
+    last_uwTick = temp;
+  }
+  if(is_cos_on)
+  {
+    for(int i = 0; i < 127; i++)
+    {
+      x2[i] = i - 63;
+      y2[i] = (signed char)(30.0f * cos((i*3 - 63.0f)/10.0f + temp / 500.0f)) + 31;
+      ssd1306_DrawPixel(i, y2[i], 1);
+    }
+  }
+
+  ssd1306_UpdateScreen();    
+  for(int i = 0; i < 127; i++)
+  {
+    x2[i] = i - 63;
+    y2[i] = (signed char)(30.0f * sin((2*i - 63.0f)/10.0f + last_uwTick / 1000.0f) * cos((i - 63.0f)/10.0f + last_uwTick / 500.0f)) + 31;
+    ssd1306_DrawPixel(i, y2[i], 0);
+  }
+  if(is_cos_on)
+  {
+    for(int i = 0; i < 127; i++)
+    {
+      x2[i] = i - 63;
+      y2[i] = (signed char)(30.0f * cos((3*i - 63.0f)/10.0f + last_uwTick / 500.0f)) + 31;
+      ssd1306_DrawPixel(i, y2[i], 0);
+    }
+  }
+#if 0
+    if(is_k1_pressed)
+    {
+      is_k1_pressed = false;
+      if(counter < 25)
+      {
+        counter += 1;
+      }
+      duty = (float)counter / 9999.0f;
+      ssd1306_SetCursor(0, 15);
+      ssd1306_WriteString("D: ", Font_11x18, White);
+      ssd1306_WriteFloat(duty, 0, Font_11x18, White);
+      ssd1306_WriteChar('%', Font_11x18, White);
+    }
+    else if(is_k2_pressed)
+    {
+      is_k2_pressed = false;
+      if(counter > 0)
+      {
+        counter -= 1;
+      }
+      duty = (float)counter / 9999.0f;
+      ssd1306_SetCursor(0, 15);
+      ssd1306_WriteString("D: ", Font_11x18, White);
+//      ssd1306_SetCursor(2, 35);
+      ssd1306_WriteFloat(duty, 0, Font_11x18, White);
+      ssd1306_WriteChar('%', Font_11x18, White);
+    }
+
+    if(is_k3_pressed)
+    {
+      is_k3_pressed = false;
+      is_pwm_on = !is_pwm_on;
+      if(is_pwm_on)
+      {
+        HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+//        HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+        ssd1306_SetCursor(2, 40);
+        ssd1306_WriteString("PWM on ", Font_11x18, White);
+      }
+      else
+      {
+        HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+        ssd1306_SetCursor(2, 40);
+        ssd1306_WriteString("PWM off", Font_11x18, White);
+      }
+    }
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, counter);
+    BSP_LED4_GPIO_Port->ODR ^= BSP_LED4_Pin | BSP_LED3_Pin;
+    ssd1306_UpdateScreen();
+#endif
   }
   /* USER CODE END 3 */
 
@@ -198,7 +392,27 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  switch(GPIO_Pin)
+  {
+    case BSP_K1_Pin:
+    {
+      is_k1_pressed = true;
+      break;
+    }
+    case BSP_K2_Pin:
+    {
+      is_k2_pressed = true;
+      break;
+    }    
+    case BSP_K3_Pin:
+    {
+      is_k3_pressed = true;
+      break;
+    }
+  }
+}
 /* USER CODE END 4 */
 
 /**
@@ -218,7 +432,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-
+//  if (htim->Instance == TIM4) {
+//    ssd1306_UpdateScreen();
+//  }
   /* USER CODE END Callback 1 */
 }
 

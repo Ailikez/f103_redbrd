@@ -24,15 +24,16 @@
   #define SSD1306_WIDTH           128
   // SSD1306 LCD height in pixels
   #define SSD1306_HEIGHT          64
-
-
+  #define SSD1306_COLOR uint16_t
+  #define White 0x0001
+  #define Black 0x0000
   //
   //  Enumeration for screen colors
   //
-  typedef enum {
-    Black = 0x00, // Black color, no pixel
-    White = 0x01  //Pixel is set. Color depends on LCD
-  } SSD1306_COLOR;
+//  typedef enum {
+//    Black = 0x00, // Black color, no pixel
+//    White = 0x01  //Pixel is set. Color depends on LCD
+//  } SSD1306_COLOR;
 
   //
   //  Struct to store transformations
@@ -57,6 +58,7 @@
   char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
   char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color);
   void ssd1306_SetCursor(uint8_t x, uint8_t y);
-
+  void ssd1306_WriteDigits(int _digit, char _fill, FontDef Font, SSD1306_COLOR color);
+  void ssd1306_WriteFloat(float _digit, char _fill, FontDef Font, SSD1306_COLOR color);
 #endif
-  
+

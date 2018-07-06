@@ -1,5 +1,5 @@
 
-#include "ssd1306.h"
+#include "ssd1306_iic.h"
 #include "alg_utils.h"
 
 // Screenbuffer
@@ -55,7 +55,10 @@ uint8_t ssd1306_Init(void)
   ssd1306_WriteCommand(0x8D); //--set DC-DC enable
   ssd1306_WriteCommand(0x14); //
   ssd1306_WriteCommand(0xAF); //--turn on SSD1306 panel
-  
+//  // test 
+//  ssd1306_Fill(White);
+//  ssd1306_UpdateScreen();
+//  HAL_Delay(1000);
   // Clear screen
   ssd1306_Fill(Black);
   
@@ -201,6 +204,16 @@ void ssd1306_WriteDigits(int _digit, char _fill, FontDef Font, SSD1306_COLOR col
 {
   char temp[7] = {'\0'};
   _itoa(_digit, temp, _fill);
+  ssd1306_WriteString(temp, Font, color);
+}
+/*
+  * write float number to screenbuffer
+  *
+  */
+void ssd1306_WriteFloat(float _digit, char _fill, FontDef Font, SSD1306_COLOR color)
+{
+  char temp[11] = {'\0'};
+  _ftoa(_digit, temp, _fill);
   ssd1306_WriteString(temp, Font, color);
 }
 //

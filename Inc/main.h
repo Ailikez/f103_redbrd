@@ -61,10 +61,13 @@
 
 #define BSP_K1_Pin GPIO_PIN_13
 #define BSP_K1_GPIO_Port GPIOC
+#define BSP_K1_EXTI_IRQn EXTI15_10_IRQn
 #define BSP_K2_Pin GPIO_PIN_14
 #define BSP_K2_GPIO_Port GPIOC
+#define BSP_K2_EXTI_IRQn EXTI15_10_IRQn
 #define BSP_K3_Pin GPIO_PIN_15
 #define BSP_K3_GPIO_Port GPIOC
+#define BSP_K3_EXTI_IRQn EXTI15_10_IRQn
 #define BSP_LED4_Pin GPIO_PIN_2
 #define BSP_LED4_GPIO_Port GPIOB
 #define BSP_LED3_Pin GPIO_PIN_12

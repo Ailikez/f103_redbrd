@@ -1,15 +1,13 @@
 --cpu Cortex-M3
 "f103_redbrd\startup_stm32f103xb.o"
-"f103_redbrd\fonts.o"
-"f103_redbrd\ssd1306.o"
-"f103_redbrd\alg_queue.o"
+"f103_redbrd\ssd1306_iic.o"
 "f103_redbrd\alg_utils.o"
-"f103_redbrd\alg_pid_multi.o"
 "f103_redbrd\main.o"
 "f103_redbrd\gpio.o"
 "f103_redbrd\freertos.o"
 "f103_redbrd\i2c.o"
 "f103_redbrd\spi.o"
+"f103_redbrd\tim.o"
 "f103_redbrd\usart.o"
 "f103_redbrd\usb_device.o"
 "f103_redbrd\usbd_conf.o"
@@ -50,6 +48,7 @@
 "f103_redbrd\usbd_ctlreq.o"
 "f103_redbrd\usbd_ioreq.o"
 "f103_redbrd\usbd_hid.o"
+"f103_redbrd\adafruit_gfx.o"
 --library_type=microlib --strict --scatter "f103_redbrd\f103_redbrd.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

@@ -52,7 +52,8 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */     
-
+#include "ssd1306_iic.h"
+#include "main.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -114,10 +115,13 @@ void StartDefaultTask(void const * argument)
   MX_USB_DEVICE_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
+  ssd1306_Init();
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(100);
+    BSP_LED4_GPIO_Port->ODR ^= BSP_LED4_Pin | BSP_LED3_Pin;
+    
   }
   /* USER CODE END StartDefaultTask */
 }

@@ -1,31 +1,31 @@
 #include "alg_pid_multi.h"
 // TODO: 添加微分先行增量式PID和不完全微分增量式PID
-#define SET_VALUE              (300.0)
-#define PID_ERR_MAX            (200)
-#define INTEGRAL_3_ERR_MAX     (200)
-#define INTEGRAL_3_ERR_MIN     (180)
+#define SET_VALUE              (300.0f)
+#define PID_ERR_MAX            (200.0f)
+#define INTEGRAL_3_ERR_MAX     (200.0f)
+#define INTEGRAL_3_ERR_MIN     (180.0f)
 #define INTEGRAL_3_ERR_DIFF    (INTEGRAL_3_ERR_MAX - INTEGRAL_3_ERR_MIN)
 
 #define _abs(num) ((num > 0)?(num):(-num))
 
 void PID_Init(PID_t *pid)
 {
-  pid->SetValue = 0.0;
-  pid->RealValue = 0.0;
-  pid->LastValue = 0.0;
-  pid->err = 0.0;
-  pid->err_last = 0.0;
-  pid->err_next = 0.0;
-  pid->pid_result = 0.0;
-  pid->integral = 0.0;
-  pid->derivative = 0.0;
-  pid->Kp = 0.0;
-  pid->Ki = 0.0;
-  pid->Kd = 0.0;
-  pid->umax = 400;
-  pid->umin = -200;
-  pid->gama = 0.5;
-  pid->alpha = 0.5;
+  pid->SetValue = 0.0f;
+  pid->RealValue = 0.0f;
+  pid->LastValue = 0.0f;
+  pid->err = 0.0f;
+  pid->err_last = 0.0f;
+  pid->err_next = 0.0f;
+  pid->pid_result = 0.0f;
+  pid->integral = 0.0f;
+  pid->derivative = 0.0f;
+  pid->Kp = 0.0f;
+  pid->Ki = 0.0f;
+  pid->Kd = 0.0f;
+  pid->umax = 400.0f;
+  pid->umin = -200.0f;
+  pid->gama = 0.5f;
+  pid->alpha = 0.5f;
 }
 #ifdef PARAM_ALL_POINTER
     //PID标准式
@@ -72,11 +72,11 @@ void PID_Init(PID_t *pid)
         pid->err = pid->SetValue - pid->RealValue;
         if (_abs(pid->err) > PID_ERR_MAX)
         {
-            index = 0.0;
+            index = 0.0f;
         }
         else
         {
-            index = 1.0;
+            index = 1.0f;
             pid->integral += pid->err;
         }
         pid->pid_result = pid->Kp*pid->err
@@ -99,11 +99,11 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > PID_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
-                index = 1.0;
+                index = 1.0f;
                 if (pid->err < 0)
                     pid->integral += pid->err;
             }
@@ -112,11 +112,11 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > PID_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
-                index = 1.0;
+                index = 1.0f;
                 if (pid->err > 0)
                     pid->integral += pid->err;
             }
@@ -125,11 +125,11 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > PID_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
-                index = 1.0;
+                index = 1.0f;
                 pid->integral += pid->err;
             }
         }
@@ -152,12 +152,12 @@ void PID_Init(PID_t *pid)
         pid->err = pid->SetValue - pid->RealValue;
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 pid->integral += pid->err;
@@ -187,12 +187,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 if (pid->err < 0)
@@ -203,12 +203,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 if (pid->err > 0)
@@ -219,12 +219,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 pid->integral += pid->err;
@@ -258,12 +258,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 if (pid->err < 0)
@@ -274,12 +274,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 if (pid->err > 0)
@@ -290,12 +290,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 pid->integral += pid->err;
@@ -355,11 +355,11 @@ void PID_Init(PID_t *pid)
         pid->err = pid->SetValue - pid->RealValue;
         if (_abs(pid->err) > PID_ERR_MAX)
         {
-            index = 0.0;
+            index = 0.0f;
         }
         else
         {
-            index = 1.0;
+            index = 1.0f;
             pid->integral += pid->err;
         }
         pid->pid_result = pid->Kp*pid->err
@@ -381,11 +381,11 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > PID_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
-                index = 1.0;
+                index = 1.0f;
                 if (pid->err < 0)
                     pid->integral += pid->err;
             }
@@ -394,11 +394,11 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > PID_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
-                index = 1.0;
+                index = 1.0f;
                 if (pid->err > 0)
                     pid->integral += pid->err;
             }
@@ -407,11 +407,11 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > PID_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
-                index = 1.0;
+                index = 1.0f;
                 pid->integral += pid->err;
             }
         }
@@ -432,12 +432,12 @@ void PID_Init(PID_t *pid)
         pid->err = pid->SetValue - pid->RealValue;
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 pid->integral += pid->err;
@@ -460,12 +460,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 if (pid->err < 0)
@@ -476,12 +476,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 if (pid->err > 0)
@@ -492,12 +492,12 @@ void PID_Init(PID_t *pid)
         {
             if (_abs(pid->err) > INTEGRAL_3_ERR_MAX)
             {
-                index = 0;
+                index = 0.0f;
             }
             else
             {
                 if (_abs(pid->err) < INTEGRAL_3_ERR_MIN)
-                    index = 1.0;
+                    index = 1.0f;
                 else
                     index = (INTEGRAL_3_ERR_MAX - _abs(pid->err)) / INTEGRAL_3_ERR_DIFF;
                 pid->integral += pid->err;
@@ -510,3 +510,4 @@ void PID_Init(PID_t *pid)
         return pid->pid_result;
     }
 #endif
+
